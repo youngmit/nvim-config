@@ -1,0 +1,17 @@
+extends fortran
+
+snippet raisee
+	CALL e${1}%raiseError(modName//"::"//myName//" - "// &
+	  "${2}")
+
+snippet raisew
+	CALL e${1}%raiseWarning(modName//"::"//myName//" - "// &
+	  "${2}")
+
+snippet raisef
+	CALL e${1}%raiseFatalError(modName//"::"//myName//" - "// &
+	  "${2}")
+
+snippet modref
+	!>  - @ref ${1:} "$1": @copybrief $1
+
