@@ -25,6 +25,9 @@ Plugin 'airblade/vim-gitgutter'
 " functionality, too.
 Plugin 'tomtom/tcomment_vim'
 
+" Solarized color scheme for gVim
+Plugin 'altercation/vim-colors-solarized'
+
 " Not sure what I was using this for...
 " Plugin 'kana/vim-operator-user'
 
@@ -71,7 +74,6 @@ set relativenumber
 
 let g:ctrlp_working_path_mode = ''
 
-colors desert
 :hi CursorLine   ctermbg=0
 
 let g:gitgutter_override_sign_column_highlight = 0
@@ -82,3 +84,14 @@ let g:gitgutter_override_sign_column_highlight = 0
 
 :set diffopt=filler,vertical
 :set mouse=a
+
+if has('gui_running')
+    colors solarized
+    syntax on
+    set guifont=Consolas:h10
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions+=c
+endif
+
+
