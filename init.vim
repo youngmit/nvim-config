@@ -49,13 +49,22 @@ Plugin 'garbas/vim-snipmate'
 " Rename open files in vim and on disk
 Plugin 'danro/rename.vim'
 
+" Rust stuff
+Plugin 'autozimu/LanguageClient-neovim'
+Plugin 'roxma/nvim-completion-manager'
+
 call vundle#end()
 
 filetype plugin indent on
 
 map <F2> :NERDTreeToggle<CR>
 
-noremap  :ClangFormat<CR>
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'stable', 'rls']
+            \ }
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F3> :call LanguageClient#textDocument_rename()<CR>
 
 let fortran_free_source=1
 
@@ -75,6 +84,7 @@ set relativenumber
 let g:ctrlp_working_path_mode = ''
 
 :hi CursorLine   ctermbg=0
+:hi MatchParen cterm=underline,bold ctermbg=none
 
 let g:gitgutter_override_sign_column_highlight = 0
 :hi GitGutterAdd ctermbg=8 ctermfg=2
@@ -94,4 +104,4 @@ if has('gui_running')
     set guioptions+=c
 endif
 
-
+syntax enable
