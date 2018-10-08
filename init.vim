@@ -88,6 +88,10 @@ Plugin 'bronson/vim-trailing-whitespace'
 " Plugin 'autozimu/LanguageClient-neovim'
 
 
+" Rust stuff
+Plugin 'autozimu/LanguageClient-neovim'
+Plugin 'roxma/nvim-completion-manager'
+
 call vundle#end()
 
 let g:deoplete#enable_at_startup = 1
@@ -108,7 +112,6 @@ filetype plugin indent on
 set encoding=utf-8
 
 map <F2> :NERDTreeToggle<CR>
-" map y <Plug>(highlightedyank)
 let NERDTreeIgnore = ['\.pyc$']
 
 let fortran_free_source=1
@@ -154,6 +157,7 @@ let g:ctrlp_working_path_mode = ''
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 :hi CursorLine   ctermbg=0
+:hi MatchParen cterm=underline,bold ctermbg=none
 
 let g:gitgutter_override_sign_column_highlight = 0
 :hi GitGutterAdd ctermbg=8 ctermfg=2
