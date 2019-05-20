@@ -94,6 +94,8 @@ Plugin 'roxma/nvim-completion-manager'
 
 call vundle#end()
 
+let g:riv_python_rst_hl=1
+
 let g:deoplete#enable_at_startup = 1
 
 map <C-p> :Denite file/rec<CR>
