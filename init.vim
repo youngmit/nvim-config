@@ -4,8 +4,8 @@ filetype off
 
 set rtp+=~/.config/nvim/bundle/Vundle.vim
 
+let g:python3_host_prog = 'C:\Python37\python.exe'
 " let g:python_host_prog = 'C:\Python27\python.exe'
-" let g:python3_host_prog = 'C:\Python36\python3.exe'
 
 call vundle#rc("$HOME/.config/nvim/bundle")
 
@@ -64,15 +64,13 @@ Plugin 'majutsushi/tagbar'
 " Per-directory configuration
 Plugin 'chazy/dirsettings'
 
-" Deoplete and deps
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'zchee/deoplete-jedi'
-Plugin 'sebastianmarkow/deoplete-rust'
-
-" vim-jedi has more features than deoplete/deoplete-jedi (e.g. go to definition,
-" go to assignment), but it is slower. So make sure to disable the autocomplete
-" feature, so that deoplete is used instead.
-Plugin 'davidhalter/jedi-vim'
+" Completion/linting/etc. wizardry
+Plugin 'dense-analysis/ale'
+Plugin 'ncm2/ncm2'
+Plugin 'roxma/nvim-yarp'
+Plugin 'ncm2/ncm2-bufword'
+Plugin 'ncm2/ncm2-path'
+Plugin 'ncm2/ncm2-jedi'
 
 Plugin 'Chiel92/vim-autoformat'
 
@@ -80,35 +78,21 @@ Plugin 'Chiel92/vim-autoformat'
 " highlighting in python docstrings.
 Plugin 'gu-fan/riv.vim'
 
+" python code formatter
+Plugin 'ambv/black'
+
 " For wrapping text in quotes, parens, etc.
 Plugin 'tpope/vim-surround'
 
 Plugin 'bronson/vim-trailing-whitespace'
 
-" Plugin 'autozimu/LanguageClient-neovim'
-
-
-" Rust stuff
-Plugin 'autozimu/LanguageClient-neovim'
-Plugin 'roxma/nvim-completion-manager'
-
 call vundle#end()
 
 let g:riv_python_rst_hl=1
 
-let g:deoplete#enable_at_startup = 1
-
 map <C-p> :Denite file/rec<CR>
 
 let fruzzy#usenative = 1
-
-" Disable lots of stuff from jedi-vim
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#goto_assignments_command = ''
-let g:jedi#goto_definitions_command = ''
-let g:jedi#usages_command = ""
-let g:jedi#completions_enabled = 0
-let g:jedi#smart_auto_mappings = 1
 
 filetype plugin indent on
 set encoding=utf-8
@@ -135,17 +119,16 @@ set relativenumber
 set cursorline
 
 if !empty(glob('.git'))
-        set grepprg=git\ grep\ -Pn
+        set grepprg=git\ grep\ -Pn\ --recurse-submodules
 else
         set grepprg=grep\ -P
 endif
 
 " Find all, open quickfix
-nmap <leader>fa :grep! "<C-R>/"<CR>:copen<CR><CR>
+nmap <leader>fa :grep! "\b<C-R><C-W>\b"<CR>:copen<CR>
 
 " Next quickfix
 nmap <leader>nn :cn<CR>
-
 
 nmap <F8> :TagbarToggle<CR>
 
@@ -153,10 +136,9 @@ nmap <F8> :TagbarToggle<CR>
 let g:bookmark_save_per_working_dir = 1
 let g:bookmark_auto_save = 1
 
-
 let g:ctrlp_working_path_mode = ''
 " Use git to provide not-ignored files for Ctrl-p
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -c --recurse-submodules --exclude-standard']
 
 :hi CursorLine   ctermbg=0
 :hi MatchParen cterm=underline,bold ctermbg=none
@@ -166,6 +148,7 @@ let g:gitgutter_override_sign_column_highlight = 0
 :hi GitGutterChange ctermbg=8 ctermfg=3
 :hi GitGutterDelete ctermbg=8 ctermfg=1
 :hi SignColumn ctermbg=8
+
 
 " Airline settings
 let g:airline#extensions#ale#enabled=1
@@ -178,7 +161,7 @@ endif
 let g:airline_section_x = '%{airline#util#prepend(airline#extensions#tagbar#currenttag(),0)}'
 let g:airline_section_z ='%p%%%#__accent_bold#%{g:airline_symbols.linenr}%l%#__restore__#:%v'
 
-
+" UI stuff
 set diffopt=filler,vertical
 set mouse=a
 
@@ -198,13 +181,11 @@ set visualbell
 highlight ExtraWhitespace ctermbg=red guibg=red
 autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 
+" Make the quickfix pane open below all other windows
 autocmd FileType qf wincmd J
 
-" Languguage server
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'stable', 'rls']
-    \ }
+" completion settings. defaults are bonkers
+let ncm2#popup_delay = 1
+set completeopt=menuone,noselect,noinsert
+autocmd BufEnter *.py call ncm2#enable_for_buffer()
 
-" deoplete-rust config
-let g:deoplete#ources#rust#racer_binary='C:\Users\myoung\.cargo\bin\racer.exe'
-let g:deoplete#sources#rust#rust_source_path='C:\Users\myoung\git\rust\src'

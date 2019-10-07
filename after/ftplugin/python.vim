@@ -1,3 +1,3 @@
-setlocal textwidth=100
+setlocal textwidth=88
 setlocal foldmethod=indent
-setlocal cc=80,100
+setlocal cc=88
